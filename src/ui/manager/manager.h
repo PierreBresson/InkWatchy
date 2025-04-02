@@ -15,6 +15,7 @@ typedef enum
     clockDebug,
     batteryDebug,
     wifiDebug,
+    bleDebug,
     gitDebug,
     weatherMenu,
     weatherConditionMenu,

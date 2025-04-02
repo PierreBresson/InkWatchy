@@ -103,6 +103,7 @@ static const WiFiCred* wifiCredStatic[] = {
 #include "../network/wifi/wifiQuick.h"
 #include "../network/ntp.h"
 #include "../network/getTimezone.h"
+#include "../network/ble/bleTask.h"
 
 // Weather
 #if WEATHER_INFO
