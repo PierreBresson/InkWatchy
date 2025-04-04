@@ -68,8 +68,7 @@ void loopBleDebugDisplay() {
     bleStatusHeight = currentHeight - maxHeight;
 
     resetSleepDelay();
-
-    disUp(true);
+    disUp();
 }
 
 // release memory and save energy
