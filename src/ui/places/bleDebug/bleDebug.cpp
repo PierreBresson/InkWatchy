@@ -67,6 +67,8 @@ void loopBleDebugDisplay() {
     centerText(lastBleStatus, &currentHeight);
     bleStatusHeight = currentHeight - maxHeight;
 
+    resetSleepDelay();
+
     disUp(true);
 }
 
