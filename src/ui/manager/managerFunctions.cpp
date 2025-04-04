@@ -138,6 +138,11 @@ void initSettingsMenu()
         count = count + 1;
         buttons[count] = {"Wifi", getImg("wifiIcon"), switchWifiDebug};
     }
+    {
+        debugLog("Adding ble to menu");
+        count = count + 1;
+        buttons[count] = {"Ble", getImg("debug"), switchBleDebug};
+    }
 #if DEBUG_MENUS
     {
         count = count + 1;

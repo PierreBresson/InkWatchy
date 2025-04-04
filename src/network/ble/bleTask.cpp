@@ -1,52 +1,53 @@
 #include "bleTask.h"
 
-#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+#define BatteryService BLEUUID((uint16_t)0x180F)
 
-//TODO: to be specified by library
-typedef enum {
-    BLE_STOPPED = 254,
-    BLE_CONNECTED = 3,
-    BLE_CONNECT_FAILED = 4,
-    BLE_DISCONNECTED = 6
-} ble_status;
+BLECharacteristic BatteryLevelCharacteristic(BLEUUID((uint16_t)0x2A19), BLECharacteristic::PROPERTY_READ);
+BLEDescriptor BatteryLevelDescriptor(BLEUUID((uint16_t)0x2901));
 
-String bleStatus() {
-    //TODO:
-    ble_status status = BLE_CONNECTED;
+bool _bleClientConnected = false;
+class MyServerCallbacks : public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+        Serial.println("connected");
+        _bleClientConnected = true;
+    };
 
-    switch (status) {
-    case BLE_CONNECTED:
-        return "Connected";
-    case BLE_STOPPED:
-        return "Stopped";
-    case BLE_CONNECT_FAILED:
-        return "Connection failed";
-    case BLE_DISCONNECTED:
-        return "Disconnected";
-    default:
-        return "UNKNOWN: " + status;
+    void onDisconnect(BLEServer* pServer) {
+        Serial.println("disconnected");
+        _bleClientConnected = false;
+    };
+
+    void onResult(BLEAdvertisedDevice advertisedDevice) {
+        Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
     }
+};
+
+void initBle() {
+    BLEDevice::init(BLUETOOTH_NAME);
+
+    BLEServer *pServer = BLEDevice::createServer();
+    pServer->setCallbacks(new MyServerCallbacks());
+    
+    BLEService *pBattery = pServer->createService(BatteryService);
+    pBattery->addCharacteristic(&BatteryLevelCharacteristic);
+    BatteryLevelDescriptor.setValue("Percentage 0 - 100");
+    BatteryLevelCharacteristic.addDescriptor(&BatteryLevelDescriptor);
+    pServer->getAdvertising()->addServiceUUID(BatteryService);
+    pBattery->start();
+
+    pServer->getAdvertising()->start();
 }
 
-void setupBle() {
-    BLEDevice::init("MyESP32");
+uint8_t level = 57;
 
-    // BLEServer *pServer = BLEDevice::createServer();
-    // BLEService *pService = pServer->createService(SERVICE_UUID);
-    // BLECharacteristic *pCharacteristic = pService->createCharacteristic(
-    //     CHARACTERISTIC_UUID, 
-    //     BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
-    // );
+bool isClientConnect() {
+    return _bleClientConnected;
+}
 
-    // pCharacteristic->setValue("Hello World says Neil");
-    // pService->start();
-    
-    // BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
-    // pAdvertising->addServiceUUID(SERVICE_UUID);
-    // pAdvertising->setScanResponse(true);
-    // pAdvertising->setMinPreferred(0x06);  
-    // pAdvertising->setMinPreferred(0x12);
-    // BLEDevice::startAdvertising();
-    // Serial.println("Characteristic defined! Now you can read it in your phone!");
-}                                         
+void runBle() {
+    BatteryLevelCharacteristic.setValue(&level, 1);
+}
+
+void stopBle() {
+    BLEDevice::deinit(true);
+}

@@ -5,4 +5,4 @@
 
 void initBleDebugDisplay();
 void loopBleDebugDisplay();
-
+void stopBleDebug();

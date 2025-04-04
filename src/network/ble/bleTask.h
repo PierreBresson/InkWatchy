@@ -2,5 +2,7 @@
 
 #include "defines.h"
 
-String bleStatus();
-void setupBle();
+void initBle();
+void runBle();
+bool isClientConnect();
+void stopBle();
