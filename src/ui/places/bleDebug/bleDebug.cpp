@@ -17,7 +17,7 @@ void initBleDebugDisplay() {
     setTextSize(TextSize);
     dis->setTextWrap(false);
     dis->setCursor(cursorXble, 1);
-    String menuName = "Debug Menu: BLE";
+    String menuName = "Debug Menu: init BLE";
     getTextBounds(menuName, NULL, NULL, NULL, &maxHeight);
 
     uint16_t currentHeight = maxHeight;
@@ -33,14 +33,11 @@ void initBleDebugDisplay() {
     bluetoothNameHeight = currentHeight;
     centerText(bleName, &currentHeight);
 
-    initBle();
-
     disUp(true);
+    initBle();
 }
 
 void loopBleDebugDisplay() {
-    runBle();
-
     setFont(&FreeSansBold9pt7b);
     setTextSize(TextSize);
     dis->setTextWrap(false);
@@ -66,9 +63,10 @@ void loopBleDebugDisplay() {
 
     centerText(lastBleStatus, &currentHeight);
     bleStatusHeight = currentHeight - maxHeight;
-
-    resetSleepDelay();
+    
     disUp();
+    runBle();
+    resetSleepDelay();
 }
 
 // release memory and save energy

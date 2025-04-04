@@ -53,13 +53,13 @@ void initBle() {
     pServer->setCallbacks(new ServerCallbacks());
     
     _advertiseBattery(pServer);
-    // _advertisePhysicalActivity(pServer);
+    _advertisePhysicalActivity(pServer);
 
     pServer->getAdvertising()->start();
 }
 
 uint8_t betteryLevel = 57;
-uint32_t stepCounter = 1742;
+int stepCounter = 1742;
 
 bool isClientConnect() {
     return _bleClientConnected;
@@ -67,9 +67,10 @@ bool isClientConnect() {
 
 void runBle() {
     BatteryLevelCharacteristic.setValue(&betteryLevel, 1);
-    // StepCounterCharacteristic.setValue(stepCounter);
+    StepCounterCharacteristic.setValue(stepCounter);
 }
 
 void stopBle() {
+    BLEDevice::stopAdvertising();
     BLEDevice::deinit(true);
 }
