@@ -18,18 +18,17 @@
 
 #include <Arduino.h>
 
-// Here add BT things
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEScan.h>
-#include <BLEAdvertisedDevice.h>
-
 #include <Adafruit_GFX.h>
 #include <GxEPD2_BW.h>
 #include <SmallRTC.h>
 #include "Fonts/FreeSansBold9pt7b.h"
 #include <WiFi.h>
 #include <WiFiMulti.h>
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
+#include <BLEScan.h>
+#include <BLEAdvertisedDevice.h>
 #include <NTPClient.h>
 #include <StableBMA.h>
 #include "FS.h"
@@ -110,6 +109,7 @@ static const WiFiCred* wifiCredStatic[] = {
 #include "../network/wifi/wifiQuick.h"
 #include "../network/ntp.h"
 #include "../network/getTimezone.h"
+#include "../network/ble/bleTask.h"
 
 // Weather
 #if WEATHER_INFO
@@ -142,6 +142,7 @@ static const WiFiCred* wifiCredStatic[] = {
 #include "../ui/watchface/watchfaceManagers/wFunctions.h"
 // Places
 #include "../ui/places/wifiDebug/wifiDebug.h"
+#include "../ui/places/bleDebug/bleDebug.h"
 #if DEBUG_MENUS
 #include "../ui/places/batteryDebug/batteryDebug.h"
 #include "../ui/places/hardwareDebug/hardwareDebug.h"

@@ -185,6 +185,11 @@ void loopManager()
         managerLaunchFunc(wifiDebug, initWifiDebugDisplay, loopWifiDebugDisplay);
         break;
     }
+    case bleDebug:
+    {
+        managerLaunchFunc(bleDebug, initBleDebugDisplay, loopBleDebugDisplay, stopBleDebug);
+        break;
+    }
     case textDialog:
     {
         managerLaunchFunc(textDialog, NULL, useButtonBlank);
