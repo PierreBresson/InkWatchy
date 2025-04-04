@@ -23,6 +23,9 @@
 #include "Fonts/FreeSansBold9pt7b.h"
 #include <WiFi.h>
 #include <WiFiMulti.h>
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
 #include <NTPClient.h>
 #include <StableBMA.h>
 #include "FS.h"

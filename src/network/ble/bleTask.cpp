@@ -30,7 +30,7 @@ String bleStatus() {
 }
 
 void setupBle() {
-    // BLEDevice::init("MyESP32");
+    BLEDevice::init("MyESP32");
 
     // BLEServer *pServer = BLEDevice::createServer();
     // BLEService *pService = pServer->createService(SERVICE_UUID);
