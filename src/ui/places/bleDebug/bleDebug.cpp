@@ -63,8 +63,8 @@ void loopBleDebugDisplay() {
     bool isCurrentlyConnect = isClientConnect();
     if(isPreviouslyConnected != isCurrentlyConnect) {
         isPreviouslyConnected = isCurrentlyConnect;
-        bleStatus = isClientConnect() ? "Connected":"Disconnected";
         dUChange = true;
+        bleStatus = isClientConnect() ? "Connected":"Disconnected";
     } 
 
     centerText(bleStatus, &currentHeight);
