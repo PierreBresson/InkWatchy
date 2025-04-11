@@ -9,15 +9,15 @@ int bleActivated = 0;
 int bleStatusHeight;
 uint16_t bluetoothNameHeight;
 String bleName;
-String lastBleStatus;
-cordInfo buttonCord;
+String bleStatus = "Disconnected";
+bool isPreviouslyConnected = false;
 
 void initBleDebugDisplay() {
     setFont(&FreeSansBold9pt7b);
     setTextSize(TextSize);
     dis->setTextWrap(false);
     dis->setCursor(cursorXble, 1);
-    String menuName = "Debug Menu: init BLE";
+    String menuName = "Debug Menu";
     getTextBounds(menuName, NULL, NULL, NULL, &maxHeight);
 
     uint16_t currentHeight = maxHeight;
@@ -59,9 +59,15 @@ void loopBleDebugDisplay() {
     centerText(bleName, &currentHeight);
 
     centerText("Bluetooth status: ", &currentHeight);
-    lastBleStatus = isClientConnect() ? "Connected":"Disconnected";
 
-    centerText(lastBleStatus, &currentHeight);
+    bool isCurrentlyConnect = isClientConnect();
+    if(isPreviouslyConnected != isCurrentlyConnect) {
+        isPreviouslyConnected = isCurrentlyConnect;
+        bleStatus = isClientConnect() ? "Connected":"Disconnected";
+        dUChange = true;
+    } 
+
+    centerText(bleStatus, &currentHeight);
     bleStatusHeight = currentHeight - maxHeight;
     
     disUp();
@@ -69,7 +75,6 @@ void loopBleDebugDisplay() {
     resetSleepDelay();
 }
 
-// release memory and save energy
 void stopBleDebug() {
     stopBle();
 }

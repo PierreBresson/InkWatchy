@@ -46,7 +46,6 @@ void _advertisePhysicalActivity(BLEServer *pServer) {
 }
 
 void initBle() {
-    Serial.println("initBle");
     BLEDevice::init(BLUETOOTH_NAME);
 
     BLEServer *pServer = BLEDevice::createServer();
@@ -59,7 +58,7 @@ void initBle() {
 }
 
 uint8_t betteryLevel = 57;
-int stepCounter = 1742;
+uint8_t stepCounter= 42;
 
 bool isClientConnect() {
     return _bleClientConnected;
@@ -67,10 +66,9 @@ bool isClientConnect() {
 
 void runBle() {
     BatteryLevelCharacteristic.setValue(&betteryLevel, 1);
-    StepCounterCharacteristic.setValue(stepCounter);
+    StepCounterCharacteristic.setValue(&stepCounter, 1);
 }
 
 void stopBle() {
     BLEDevice::stopAdvertising();
-    BLEDevice::deinit(true);
 }
