@@ -42,6 +42,7 @@
 #include <Olson2POSIX.h>
 #define ARDUINOJSON_ENABLE_PROGMEM 0 // Needed
 #include <ArduinoJson.h>
+#include <mbedtls/md5.h>
 
 // Order important
 #include "macros.h"

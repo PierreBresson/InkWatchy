@@ -54,12 +54,40 @@ void lookForFalse(bool newBool, bool *oldValue)
 bool accConfig()
 {
     bool status = true;
-    //Enabling default BMA config
+    // Enabling default BMA config
     lookForFalse(rM.SBMA.defaultConfig(true), &status);
+    if(status == false) {
+        debugLog("defaultConfig failed");
+        return status;
+    }
     lookForFalse(rM.SBMA.enableAccel(), &status);
+    if(status == false) {
+        debugLog("enableAccel failed");
+        return status;
+    }
 
-    lookForFalse(rM.SBMA.enableFeature(BMA423_STEP_CNTR, true), &status);
+    if(BMA_VERSION == 423) {
+        lookForFalse(rM.SBMA.enableFeature(BMA423_STEP_CNTR, true), &status);
+        if(status == false) {
+            debugLog("enableFeature(BMA423_STEP_CNTR failed");
+            return status;
+        }
+    } else if(BMA_VERSION == 456) {
+        lookForFalse(rM.SBMA.enableFeature(BMA456_STEP_CNTR, true), &status);
+        if(status == false) {
+            debugLog("enableFeature(BMA456_STEP_CNTR failed");
+            return status;
+        }
+    }
+
+    /*
+    // We should not need this, Watchy v3 users maybe
     lookForFalse(rM.SBMA.enableFeature(BMA423_STEP_CNTR_INT, true), &status);
+    if(status == false) {
+        debugLog("enableFeature(BMA423_STEP_CNTR_INT failed");
+        return status;
+    }
+    */
 
     return status;
 }
@@ -69,20 +97,31 @@ void initAxc()
     debugLog("initAxc Launched");
     if (rM.initedAxc == false)
     {
-        uint8_t Type = rM.SRTC.getType(); // TODO: fix this
-        if(Type == 0) {
-            debugLog("Type SRTC is invalid, fix this, defaulting to 2");
-            Type = 2;
-        }
-        if (rM.SBMA.begin(readRegisterBMA, writeRegisterBMA, vTaskDelay, Type, BMA4_I2C_ADDR_PRIMARY, -1) == false) //Create a variable for the "(Type < 3), 14" part ?
-        {
-            debugLog("Failed to init bma");
-            return;
+        uint8_t type;
+#if ATCHY_VER == WATCHY_1
+        type = 1;
+#elif ATCHY_VER == WATCHY_1_5
+        type = 2;
+#elif ATCHY_VER == WATCHY_2
+        type = 2;
+#elif ATCHY_VER == WATCHY_3
+        type = 3;
+#elif ATCHY_VER == YATCHY
+        type = 4;
+#endif
+
+        debugLog("Acc type is: " + String(type));
+        if(rM.SBMA.__init == false) {
+            if (rM.SBMA.begin(readRegisterBMA, writeRegisterBMA, vTaskDelay, type, BMA4_I2C_ADDR_PRIMARY, false, -1, -1, BMA_VERSION) == false)
+            {
+                debugLog("Failed to init bma");
+                return;
+            }    
         }
 
         if (!accConfig())
         {
-            debugLog("Failed to init bma - default config");
+            debugLog("Failed to init bma - config");
             return;
         }
         rM.initedAxc = true;

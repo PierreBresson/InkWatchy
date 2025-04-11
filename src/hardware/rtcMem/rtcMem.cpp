@@ -189,3 +189,96 @@ RTC_DATA_ATTR rtcMem rM = {
 #endif
 #endif
 };
+
+#if RTC_MEMORY_BACKUP
+
+RTC_DATA_ATTR unsigned char rtcMd5[16];
+
+bool didRtcChange(rtcMem *source, rtcMem *destination)
+{
+    debugLog("Comparing rtc data");
+
+    // Alarms
+    if (memcmp(source->alarms, destination->alarms, sizeof(source->alarms)) != 0)
+    {
+        debugLog("Alarms data differs");
+        return true;
+    }
+
+    if (source->nextAlarm != destination->nextAlarm ||
+        source->nextAlarmIndex != destination->nextAlarmIndex)
+    {
+        debugLog("Alarm metadata differs");
+        return true;
+    }
+
+    // posixTimeZone
+    if (memcmp(source->posixTimeZone, destination->posixTimeZone, sizeof(source->posixTimeZone)) != 0)
+    {
+        debugLog("Timezone data differs");
+        return true;
+    }
+
+    debugLog("No changes detected");
+    return false;
+}
+
+void rtcMemRetrieve(rtcMem *source, rtcMem *destination)
+{
+    debugLog("Retrieving data for rtc memory");
+    // Alarms
+    /*
+    for (int i = 0; i < MAX_ALARMS; i++) {
+        destination->alarms[i] = source->alarms[i];
+    }
+    */
+    memcpy(destination->alarms, source->alarms, sizeof(destination->alarms));
+
+    destination->nextAlarm = source->nextAlarm;
+    destination->nextAlarmIndex = source->nextAlarmIndex;
+    // posixTimeZone
+    /*
+    for (int i = 0; i < 50; i++) {
+        destination->posixTimeZone[i] = source->posixTimeZone[i];
+    }
+    */
+    memcpy(
+        destination->posixTimeZone,
+        source->posixTimeZone,
+        sizeof(destination->posixTimeZone) // Automatically calculates total bytes
+    );
+}
+
+void rtcMemBackupManage()
+{
+    debugLog("Entering rtcMemBackupManage");
+    if (bootStatus.fromWakeup == false && bootStatus.resetReason != ESP_RST_PANIC && fsSetup() == true)
+    {
+        String filePath = String("/conf/") + String(CONF_RTC_BACKUP);
+        if (fsFileExists(filePath) == true)
+        {
+            if (fsGetFileSize(filePath) == sizeof(rtcMem))
+            {
+                debugLog("Rtc backup exists and is correct size, recovering it");
+                bufSize buff = fsGetBlob(CONF_RTC_BACKUP);
+                rtcMem *rtcMemTmp = (rtcMem *)buff.buf;
+                rtcMemRetrieve(rtcMemTmp, &rM);
+
+                // free(buff.buf);
+
+                fsRemoveFile(filePath);
+                esp_sleep_enable_timer_wakeup(1000);
+                esp_deep_sleep_start();
+            }
+            else
+            {
+                debugLog("Rtc backup size is wrong, we can't doo anything");
+            }
+        }
+        else
+        {
+            debugLog("Rtc backup doesn't exist, nevermind");
+        }
+    }
+}
+#endif

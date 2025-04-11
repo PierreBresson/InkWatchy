@@ -98,16 +98,21 @@ void goSleep()
     //     delayTask(25);
     // }
 #if LP_CORE == true
-    deInitScreen();
-    delayTask(10);
-    // This enables the subsystem, so it doesn't shut it down or something
-    // https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html#ulp-coprocessor-wakeup
-    // TODO: maybe this https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html#power-down-of-rtc-peripherals-and-memories
-    ESP_ERROR_CHECK(esp_sleep_enable_ulp_wakeup());
+    if (rM.disableWakeUp == false)
+    {
+        deInitScreen();
+        delayTask(10);
+        // This enables the subsystem, so it doesn't shut it down or something
+        // https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html#ulp-coprocessor-wakeup
+        // TODO: maybe this https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html#power-down-of-rtc-peripherals-and-memories
+        ESP_ERROR_CHECK(esp_sleep_enable_ulp_wakeup());
 
-    initRtcGpio();
-    loadLpCore();
-    runLpCore();
+        initRtcGpio();
+        loadLpCore();
+        runLpCore();
+    } else {
+        deInitScreen();
+    }
 #else
     deInitScreen();
     // Not needed
@@ -124,6 +129,26 @@ void goSleep()
     // deInitWatchdogTask();
 #if LP_CORE == false
     wakeUpManageRTC();
+#endif
+
+#if RTC_MEMORY_BACKUP
+    unsigned char tmpHash[16];
+    mbedtls_md5((unsigned char*)&rM, sizeof(rtcMem), tmpHash);
+    if (memcmp(tmpHash, rtcMd5, 16) == 0) {
+        debugLog("Hashes are equal, not updating backup");
+    } else {
+        debugLog("Hashes are diff");
+        memcpy(rtcMd5, tmpHash, 16);
+        bufSize buff = fsGetBlob(CONF_RTC_BACKUP);
+        if(buff.size != sizeof(rtcMem) || didRtcChange((rtcMem*)buff.buf, &rM) == true) {
+            debugLog("Saving rtc memory");
+            free(buff.buf);
+            fsSetBlob(CONF_RTC_BACKUP, (uint8_t*)&rM, sizeof(rtcMem));    
+        } else {
+            free(buff.buf);
+            debugLog("Not saving rtc memory because didRtcChange is false");
+        }
+    }
 #endif
 
     debugLog("Going sleep...");
