@@ -144,11 +144,12 @@ static const WiFiCred* wifiCredStatic[] = {
 // Places
 #include "../ui/places/wifiDebug/wifiDebug.h"
 #include "../ui/places/bleDebug/bleDebug.h"
-#if DEBUG_MENUS
+#if DEBUG == 1 || DEBUG_MENUS == 1
 #include "../ui/places/batteryDebug/batteryDebug.h"
 #include "../ui/places/hardwareDebug/hardwareDebug.h"
 #include "../ui/places/clockDebug/clockDebug.h"
 #include "../ui/places/gitDebug/gitDebug.h"
+#include "../ui/places/accDebug/accDebug.h"
 #endif
 #include "../ui/places/watchfaceSelector/watchfaceSel.h"
 #if BOOK
@@ -179,6 +180,9 @@ static const WiFiCred* wifiCredStatic[] = {
 #endif
 #if RGB_DIODE
 #include "../ui/places/party/party.h"
+#endif
+#if HEART_MONITOR
+#include "../ui/places/heartMonitor/heartMonitor.h"
 #endif
 #if FONT_MENU_ENABLED
 #include "../ui/places/fontPreview/fontPreview.h"

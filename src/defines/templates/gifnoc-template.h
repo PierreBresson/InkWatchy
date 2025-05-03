@@ -25,6 +25,11 @@
 // It may also increase flash usage and life, but hey, mine still works so yours will too
 // If it doesn't save something you want, add it yourself or request it
 #define RTC_MEMORY_BACKUP 0
+// 0: No rotation (0 degrees) - default
+// 1: Rotate 90 degrees clockwise
+// 2: Rotate 180 degrees
+// 3: Rotate 270 degrees clockwise
+#define SCREEN_ROTATION 0
 
 // Timezone! So:
 // - You don't set anything, it will try to ques based on IP, it can fail sometimes
@@ -83,22 +88,22 @@
 #define MOON_MAX_RADIUS 64.0
 
 // Alarms
-#define INK_ALARMS 1           // Enable alarms
-#define MAX_ALARMS 10          // More alarms, more RTC memory usage
-#define ALARM_DURATION_S 60    // Seconds of ringing
-#define ALARM_MOTOR_DELAY 1000 // Ms of delay for motor
-#define ALARM_MOTOR_TIME 200   // Time for motor to vibrate
-#define ALARM_WIFI_MIN_STRENGTH 60 // from 1-99, percents
-#define ALARM_WIFI_MULTIPLIER 7 // Multiplies the time if wifi connect is needed
-#define ALARM_QUICK_ID MAX_ALARMS-1 // Which alarm to replace for quick alarms, the default is the last one. Can't be higher than MAX_ALARMS-1
-#define ALARM_DISABLE_BACK 1 // No escaping if (wifi) alarm
+#define INK_ALARMS 1                  // Enable alarms
+#define MAX_ALARMS 10                 // More alarms, more RTC memory usage
+#define ALARM_DURATION_S 60           // Seconds of ringing
+#define ALARM_MOTOR_DELAY 1000        // Ms of delay for motor
+#define ALARM_MOTOR_TIME 200          // Time for motor to vibrate
+#define ALARM_WIFI_MIN_STRENGTH 60    // from 1-99, percents
+#define ALARM_WIFI_MULTIPLIER 7       // Multiplies the time if wifi connect is needed
+#define ALARM_QUICK_ID MAX_ALARMS - 1 // Which alarm to replace for quick alarms, the default is the last one. Can't be higher than MAX_ALARMS-1
+#define ALARM_DISABLE_BACK 1          // No escaping if (wifi) alarm
 
 // Pomodoro (Using alarms, so needs them)
 #define POMODORO_ALARM 1
-#define ALARM_POMODORO_ID MAX_ALARMS-2
-#define POMODORO_WORK_M 25 // 25
-#define POMODORO_SHORT_PAUSE_M 5 // 5
-#define POMODORO_LONG_PAUSE_M 15 // 15
+#define ALARM_POMODORO_ID MAX_ALARMS - 2
+#define POMODORO_WORK_M 25          // 25
+#define POMODORO_SHORT_PAUSE_M 5    // 5
+#define POMODORO_LONG_PAUSE_M 15    // 15
 #define POMODORO_LONG_PAUSE_AFTER 4 // 4
 
 // Book things
@@ -167,7 +172,7 @@
 #define BUTTON_CPU_SPEED normalSpeed      // Cpu speed when it has woken up by a button
 #define SOFT_START_THINGS 1               // Slowly starts things, like wifi to prevent brownout reset.
 #define SOFT_START_DELAY_MS 4500
-#define FORCE_DISABLE_ACC 0 // 1 Means ACC is disabled
+#define FORCE_DISABLE_ACC 0 // 1 Means ACC is disabled, BMA530 doesn't like that, increases power consumption
 
 // Vault
 #define VAULT 1
@@ -180,6 +185,9 @@
 
 // Credits page
 #define CREDITS 1 // Feel free to disable it for your own usage :D
+
+// Heart monitor
+#define HEART_MONITOR 0 // Needs Acc
 
 // Advanced
 #define BUTTON_TASK_DELAY 60 // In ms, lower means faster button detection but more cpu usage
@@ -199,6 +207,11 @@
 // - you live in a volcano and need to turn the esp32 off if its above a certain temperature, or below
 // - you stream youtube and the cpu gets too hot
 #define TEMP_CHECKS_ENABLED 0
+// Enable temp checks for the watchies you specify (I have a few of them, the precision on the esp32 doesn't make sense for this feature)
+// if you enable temp checks, but the cpu is disabled, it will not try low / high temp fixes
+#define TEMP_ESP32 0   // Watchy v2 and below
+#define TEMP_ESP32S3 1 // Watchy v3
+#define TEMP_ESP32C6 1 // Yatchy
 // Those variables won't work for you, you need to edit them yourself after you see the temperature logs
 // Also everything in Celsius, americans need to metric (Or add support for burgers per inch for inkwatchy)
 // just joking :D
@@ -264,6 +277,9 @@ Supported country codes are "01"(world safe mode) "AT","AU","BE","BG","BR", "CA"
 #define MCP_GPIO_EXPANDER_DISABLE 0            // Bad idea, may increase power consumption
 #define MCP_GPIO_EXPANDER_DISABLE_INTERRUPTS 0 // Yatchy with no battery, huh
 #define SCREEN_CORNER_WAKEUP 0                 // writes a few pixels in the left top corner, works without DEBUG turned on
+#define I2C_SCANNER 0                          // For yatchy testing
+#define DUMP_LOOP_ACC 0 // Needs ACC
+#define DUMP_LOOP_ACC_DIFF 1 // Only shows diff from previous reading
 
 // Voltage reading average
 #define VOLTAGE_AVG_COUNT 20

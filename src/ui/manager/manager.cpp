@@ -173,6 +173,13 @@ void loopManager()
 #endif
         break;
     }
+    case accDebug:
+    {
+#if DEBUG_MENUS
+        managerLaunchFunc(accDebug, initAccDebug, loopAccDebug, exitAccDebug);
+#endif
+        break;
+    }
     case batteryDebug:
     {
 #if DEBUG_MENUS
@@ -388,6 +395,13 @@ void loopManager()
     {
 #if RGB_DIODE
         managerLaunchFunc(partyApp, initParty, loopParty, exitParty);
+#endif
+        break;
+    }
+    case heartMonitor:
+    {
+#if HEART_MONITOR
+        managerLaunchFunc(heartMonitor, initHeartMonitor, loopHeartMonitor, exitHeartMonitor);
 #endif
         break;
     }
