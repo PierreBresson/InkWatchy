@@ -4,5 +4,5 @@
 
 void initBle();
 void runBle();
-bool isClientConnect();
+bool isBleClientConnect();
 void stopBle();
