@@ -53,6 +53,12 @@ void switchWifiDebug()
     generalSwitch(wifiDebug);
 }
 
+
+void switchBleDebug()
+{
+    generalSwitch(bleDebug);
+}
+
 void switchGitDebug()
 {
     generalSwitch(gitDebug);

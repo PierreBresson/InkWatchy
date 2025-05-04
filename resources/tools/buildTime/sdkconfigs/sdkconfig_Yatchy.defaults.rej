@@ -1,0 +1,10 @@
+diff a/resources/tools/buildTime/sdkconfigs/sdkconfig_Yatchy.defaults b/resources/tools/buildTime/sdkconfigs/sdkconfig_Yatchy.defaults	(rejected hunks)
+@@ -15,4 +15,6 @@ CONFIG_RTC_CLK_CAL_CYCLES=3000
+ # LP Core
+ CONFIG_ULP_COPROC_ENABLED=y
+ CONFIG_ULP_COPROC_TYPE_LP_CORE=y
+\ No newline at end of file
+ CONFIG_ULP_COPROC_RESERVE_MEM=8192
+ # Compiler
+ CONFIG_COMPILER_OPTIMIZATION_PERF=y
+\ No newline at end of file

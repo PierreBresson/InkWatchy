@@ -15,6 +15,7 @@ typedef enum
     clockDebug,
     batteryDebug,
     wifiDebug,
+    bleDebug,
     gitDebug,
     accDebug,
     weatherMenu,
@@ -99,6 +100,7 @@ void switchGeneralDebug();
 void switchClockDebug();
 void switchBatteryDebug();
 void switchWifiDebug();
+void switchBleDebug();
 void switchGitDebug();
 void switchAccDebug();
 void switchWeatherMenu();

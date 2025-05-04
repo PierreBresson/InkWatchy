@@ -1,0 +1,8 @@
+diff a/resources/tools/buildTime/sdkconfigs/sdkconfig_Watchy_2.defaults b/resources/tools/buildTime/sdkconfigs/sdkconfig_Watchy_2.defaults	(rejected hunks)
+@@ -3,3 +3,5 @@ CONFIG_IDF_TARGET="esp32"
+ CONFIG_ARDUINO_VARIANT="esp32"
+ CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+ CONFIG_ESPTOOLPY_FLASHSIZE="4MB"
+# Compiler, for size because of IRAM for BT
+ CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+\ No newline at end of file

@@ -12,3 +12,5 @@ CONFIG_ESP_SYSTEM_RTC_EXT_XTAL_BOOTSTRAP_CYCLES=256 # This value is for faulty R
 CONFIG_RTC_CLK_CAL_CYCLES=3000
 # A very interesting option but it may decrease battery life? to be tested.
 CONFIG_ESP_XT_WDT=y
+# Compiler
+CONFIG_COMPILER_OPTIMIZATION_PERF=y

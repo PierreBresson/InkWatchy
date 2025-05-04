@@ -1,0 +1,8 @@
+diff a/resources/tools/buildTime/sdkconfigs/sdkconfig_general.defaults b/resources/tools/buildTime/sdkconfigs/sdkconfig_general.defaults	(rejected hunks)
+@@ -61,7 +61,6 @@ CONFIG_BOOTLOADER_CUSTOM_RESERVE_RTC_IN_CRC=n
+ CONFIG_BOOTLOADER_CUSTOM_RESERVE_RTC_SIZE=0x10
+ 
+ # Compiler
+ COMPILER_DISABLE_GCC12_WARNINGS=y
+ 
+ # Partition table
